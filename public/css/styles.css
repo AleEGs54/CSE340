@@ -16,8 +16,8 @@ html, body{
   padding: 0;
 }
 
-/* HEADER */
-main{
+/* Main */
+.main-wrap{
   display: flex;
   flex-direction: column;
   padding: 5px;
@@ -206,6 +206,68 @@ main{
 
 }
 
+/* Inventory */
+.classification-title{
+  margin-left: 1rem;
+}
+
+#inv-display{
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin: 0 auto;
+  gap: 1rem;
+  /* This width could alter the image ratios */
+  width: 15rem;
+}
+
+.inv-item{
+  border: 1px solid black;
+  border-radius: .8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+}
+
+.inv-item a{
+  width: 100%;
+  height: 100%;
+}
+
+.inv-item a img{
+  width: 100%;
+  height: 100%;
+  
+}
+
+.namePrice{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 1rem;
+}
+
+.namePrice hr{
+  border: none;
+  height: 4px;
+  width: 100%;
+  background-color: #000;
+}
+
+.namePrice h2, .namePrice span{
+  text-align: center;
+}
+
+.namePrice span{
+  font-size: 20px;
+}
+
+
+
 /* View for larger Screens */
 @media (min-width: 1024px) {
   body{
@@ -213,7 +275,7 @@ main{
     padding: 3rem 10rem;
   }
 
-  main{
+  .main-wrap{
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: 1fr 22.5rem;
@@ -272,4 +334,17 @@ main{
     margin: 0 0 2rem 0;
   }
   
+  /* Inventory */
+
+  #inv-display{
+    flex-direction: row;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    width: auto;
+  }
+
+  .inv-item{
+  flex: 0 1 15rem;
+  height: 23rem;
+  }
 }
