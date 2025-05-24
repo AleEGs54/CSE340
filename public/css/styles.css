@@ -208,7 +208,7 @@ html, body{
 
 /* Inventory */
 .classification-title{
-  margin-left: 1rem;
+  margin-left: .5rem;
 }
 
 #inv-display{
@@ -266,6 +266,43 @@ html, body{
   font-size: 20px;
 }
 
+/* Details */
+
+
+
+
+
+.details-picture{
+  width: 100%;
+}
+
+.details-subtitle{
+  margin-left: .5rem;
+  font-size: 1.4rem;
+}
+
+.details{
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.details p{
+  margin: 0;
+  padding: 1rem .5rem;
+}
+
+.details p:nth-child(odd){
+  background-color: #98989873;
+}
+
+.car-price, .highlight{
+  font-weight: bold;
+}
+
+.highlight{
+  font-size: 19px;
+}
 
 
 /* View for larger Screens */
@@ -342,9 +379,34 @@ html, body{
     flex-wrap: wrap;
     width: auto;
   }
-
+  
   .inv-item{
-  flex: 0 1 15rem;
-  height: 23rem;
+    flex: 0 1 15rem;
+    margin: 0 3rem ;
   }
+
+  /* Details */
+  .details-wrap{
+  display: grid;
+  padding: 1rem;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 1fr;
+  column-gap: 1rem;
+  align-items: center;
+}
+
+.details{
+  padding: 0;
+}
+
+.details-picture{
+  width: 90%;
+  grid-column: 1/2;
+  grid-row: 1/3;
+}
+
+.details-subtitle{
+  grid-column: 2/3;
+  font-size: 1.4rem;
+}
 }

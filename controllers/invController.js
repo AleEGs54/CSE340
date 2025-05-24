@@ -19,4 +19,27 @@ invCont.buildByClassificationId = async function (req, res, next) {
   })
 }
 
+/* ***************************
+ *  Build details by id view
+ * ************************** */
+invCont.buildDetailsById = async function (req, res, next) {
+  const invId = req.params.invId;
+  const data = await invModel.getDetailsById(invId);
+  const view = await utilities.buildDetailsView(data);
+  let nav = await utilities.getNav();
+  const vehicleName = `${data[0].inv_year} ${data[0].inv_make} ${data[0].inv_model}`
+  res.render("./inventory/details", { 
+    title: vehicleName,
+    nav,
+    view,
+   })
+}
+
+/* ***************************
+ *  Build inventory by classification view
+ * ************************** */
+invCont.throwError = async function (req, res, next) {
+  throw new Error("Intentional 500 error triggered");
+}
+
 module.exports = invCont;

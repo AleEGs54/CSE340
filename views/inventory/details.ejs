@@ -1,0 +1,11 @@
+<!-- Add a title -->
+
+<% if (title) { %>
+    <h1 class="classification-title"><%= title %></h1>
+<% } else {
+    res.redirect('/')
+} %>
+
+<%# messages() %>
+
+<%- view %>
