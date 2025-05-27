@@ -1,0 +1,79 @@
+<% if (title) { %>
+<h1 class="classification-title"><%= title %></h1>
+<% } else { res.redirect('/') } %>
+
+<% if (errors) {%>
+  <ul class="notice">
+    <% errors.array().forEach(error => { %>
+      <li><%= error.msg %></li>
+      <% }) %>
+  </ul>
+  <% } %>
+
+<form class="register-form" action="/account/register" method="post">
+  <span><em>All fields are required</em></span>
+
+  <label>
+    First Name
+    <input
+      required
+      type="text"
+      name="account_firstname"
+      id="account_firstname"
+      title="First Name"
+    />
+  </label>
+  <label>
+    Last Name
+    <input
+      required
+      type="text"
+      name="account_lastname"
+      id="account_lastname"
+      title="Last Name"
+    />
+  </label>
+  <label>
+    Email address
+    <input
+      required
+      type="email"
+      name="account_email"
+      id="account_email"
+      title="Email Address"
+    />
+  </label>
+  <label>
+    Password
+    <input
+      required
+      type="password"
+      name="account_password"
+      id="account_password"
+      title="Password"
+      pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$"
+    />
+    <small>
+      At least 12 characters, 1 uppercase character, 1 number and 1 special character.
+    </small>
+    <button type="button" class="show-pswd">
+        Show Password
+    </button>
+  </label>
+  <button type="submit" class="register-button">Register</button>
+</form>
+
+<script>
+  const showButton = document.querySelector('.show-pswd')
+  showButton.addEventListener('click', ()=>{
+    const pwdInput = document.querySelector('#account_password');
+    if (pwdInput.type === 'password'){
+      pwdInput.setAttribute('type', 'text')
+      showButton.textContent = 'Hide Password'
+    } else {
+      pwdInput.setAttribute('type', 'password')
+      showButton.textContent = 'Show Password'
+    }
+
+})
+</script> 

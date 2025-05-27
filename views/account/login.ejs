@@ -1,0 +1,39 @@
+<!-- Add a title -->
+
+<% if (title) { %>
+<h1 class="classification-title"><%= title %></h1>
+<% } else { res.redirect('/') } %>
+
+<div class="login-container">
+  <form class="login-form">
+    <%- messages() %>
+    <label>
+      Email Address:
+      <input
+        type="email"
+        id="account_email"
+        name="account_email"
+        title="Type an email adress"
+        required
+      />
+    </label>
+    <label>
+      Password:
+      <input
+        type="password"
+        id="account_password"
+        name="account_password"
+        title="Type the password"
+        required
+        pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$"
+      />
+    </label>
+    <small>
+      At least 12 characters, 1 uppercase character, 1 number and 1 special character.
+    </small>
+    <button type="submit" class="login-button">Login</button>
+  </form>
+  <div class="create-account">
+    <span>No account? <a href="/account/register">Sign-Up</a></span>
+  </div>
+</div>
