@@ -32,7 +32,6 @@ invCont.buildClassificationForm = async function (req, res, next) {
 invCont.buildInvForm = async function (req, res, next) {
   let nav = await utilities.getNav();
   let select = await utilities.buildClassificationList();
-  console.log(select);
   res.render("./inventory/add-inventory", {
     title: "Add Vehicle",
     nav,

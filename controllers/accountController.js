@@ -90,7 +90,6 @@ async function loginAccount(req, res) {
 
     
     if (loginResult.rowCount){
-        console.log(loginResult)
         req.flash(
             'notice',
             `Welcome back, ${loginResult.rows[0].account_firstname}!`

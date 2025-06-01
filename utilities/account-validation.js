@@ -83,7 +83,6 @@ const validate = {}
     const { account_email } = req.body
     let errors = []
     errors = validationResult(req)
-    console.log(errors)
     if(!errors.isEmpty()){
         let nav = await utilities.getNav()
         res.render('account/login', {

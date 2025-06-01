@@ -30,7 +30,6 @@ Util.getNav = async function (req, res, next) {
  * Build the classification view HTML
  * ************************************ */
 Util.buildClassificationGrid = async function (data) {
-  console.log(data);
   let grid;
   if (data.length > 0) {
     grid = '<ul id="inv-display">';
@@ -81,7 +80,6 @@ Util.buildClassificationGrid = async function (data) {
 };
 
 Util.buildDetailsView = async function (data) {
-  console.log(data);
   let display;
   if (data) {
     display = `
