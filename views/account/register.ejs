@@ -21,6 +21,7 @@
       name="account_firstname"
       id="account_firstname"
       title="First Name"
+      value="<%= locals.account_firstname %>"
     />
   </label>
   <label>
@@ -31,6 +32,7 @@
       name="account_lastname"
       id="account_lastname"
       title="Last Name"
+      value="<%= locals.account_lastname %>"
     />
   </label>
   <label>
@@ -41,6 +43,7 @@
       name="account_email"
       id="account_email"
       title="Email Address"
+      value="<%= locals.account_email %>"
     />
   </label>
   <label>
@@ -56,10 +59,10 @@
     <small>
       At least 12 characters, 1 uppercase character, 1 number and 1 special character.
     </small>
+  </label>
     <button type="button" class="show-pswd">
         Show Password
     </button>
-  </label>
   <button type="submit" class="register-button">Register</button>
 </form>
 

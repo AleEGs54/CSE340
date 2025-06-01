@@ -1,0 +1,60 @@
+<% if (title) { %>
+<h1 class="classification-title"><%= title %></h1>
+<% } else { res.redirect('/') } %>
+
+<% if (errors) {%>
+  <ul class="notice">
+    <% errors.array().forEach(error => { %>
+      <li><%= error.msg %></li>
+      <% }) %>
+  </ul>
+  <% } %>
+
+  
+
+<form class="new-vehicle-form" action="/inv/add-inventory" method="post">
+  <em>ALL FIELDS ARE REQUIRED</em>
+  <div class="newCar-wrapper">
+    <label>
+        Classification
+        <%- select %>
+    </label>
+    <label>
+        Make
+        <input required type="text" name="inv_make" placeholder="Min of 3 characters" pattern=".{3,}" value="<%= locals.inv_make %>">
+    </label>
+    <label>
+        Model
+        <input required type="text" name="inv_model" placeholder="Min of 3 characters" pattern=".{3,}" value="<%= locals.inv_model %>">
+    </label>
+    <label>
+        Description
+        <textarea required name="inv_description" id="invDescription" ><%= locals.inv_description %></textarea>
+    </label>
+    <label>
+        Image Path
+        <input required type="text" name="inv_image" id="imgPath" value="<%= locals.inv_image %>">
+    </label>
+    <label>
+        Thumbnail Path
+        <input required type="text" name="inv_thumbnail" id="thbPath" value="<%= locals.inv_thumbnail %>">
+    </label>
+    <label>
+        Price
+        <input required type="text" name="inv_price" placeholder="Decimal or integer" pattern="\d+(\.\d{1,2})?" value="<%= locals.inv_price %>">
+    </label>
+    <label>
+        Year
+        <input required type="text" name="inv_year" placeholder="4-digit year" pattern="\d{4}" value="<%= locals.inv_year %>">
+    </label>
+    <label>
+        Miles
+        <input required type="text" name="inv_miles" placeholder="Digits only" pattern="\d+" value="<%= locals.inv_miles %>">
+    </label>
+    <label>
+        Color
+        <input required type="text" name="inv_color" value="<%= locals.inv_color %>">
+    </label>
+    <button type="submit" class="addClass-button">Add Classification</button>
+  </div>
+</form>

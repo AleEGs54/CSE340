@@ -1,4 +1,5 @@
 const utilities = require('.')
+const accountModel = require("../models/account-model")
 const { body, validationResult } = require('express-validator')
 const validate = {}
 
@@ -24,7 +25,13 @@ const validate = {}
         .trim()
         .escape()
         .isEmail().withMessage('A valid email is required')
-        .normalizeEmail(),
+        .normalizeEmail()
+        .custom(async (account_email) =>{
+            const emailExists = await accountModel.checkExistingEmail(account_email)
+            if(emailExists){
+                throw new Error('Email exists. Please log in or use different email')
+            }
+        }),
 
         // password is required and must be strong password
         body('account_password')
@@ -39,14 +46,24 @@ const validate = {}
     ]
  }
 
+ validate.loginRules = () => {
+    return [
+        body('account_email')
+        .trim()
+        .escape()
+        .isEmail().withMessage('A valid email is required')
+    ]
+ }
+
  /* ******************************
  * Check data and return errors or continue to registration
  * ***************************** */
 
+ //This middleware is set here to divide the code, but this could also be in accountRoute.js because is a middleware. Same with the entire file.
  validate.checkRegData = async (req,res, next) => {
     const { account_firstname, account_lastname, account_email} = req.body
     let errors = []
-    errors = validationResult(req)
+    errors = validationResult(req) 
     if(!errors.isEmpty()){
         let nav = await utilities.getNav()
         res.render('account/register', {
@@ -62,4 +79,22 @@ const validate = {}
     next()
  }
 
- module.exports = validate
+ validate.checkLoginData = async (req, res, next) =>{
+    const { account_email } = req.body
+    let errors = []
+    errors = validationResult(req)
+    console.log(errors)
+    if(!errors.isEmpty()){
+        let nav = await utilities.getNav()
+        res.render('account/login', {
+            errors,
+            title: 'Login',
+            nav,
+            account_email,
+        })
+        return
+    }
+    next()
+ }
+
+ module.exports = validate 

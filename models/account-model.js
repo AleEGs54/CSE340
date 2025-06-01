@@ -1,5 +1,18 @@
 const pool = require('../database')
 
+/* **********************
+ *   Check for existing email
+ * ********************* */
+async function checkExistingEmail(account_email){
+    try{
+        const sql = "SELECT * FROM account WHERE account_email = $1"
+        const email = await pool.query(sql, [account_email])
+        return email.rowCount
+    } catch (error) {
+        return error.message
+    }
+}
+
 /* *****************************
 *   Register new account
 * *************************** */
@@ -11,4 +24,21 @@ async function registerAccount(account_firstname, account_lastname, account_emai
         return error.message
     }
 }
-module.exports = {registerAccount}
+
+/* *****************************
+*   Login account
+* *************************** */
+
+async function loginAccount(account_email, account_password){
+    try{
+        const sql =
+        `SELECT * FROM account 
+        WHERE account_email = $1
+        AND account_password = $2`
+        return await pool.query(sql, [account_email, account_password])
+    } catch (error) {
+        return error.message
+    }
+}
+
+module.exports = {registerAccount, checkExistingEmail, loginAccount}
