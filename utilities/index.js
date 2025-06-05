@@ -1,5 +1,7 @@
 const invModel = require("../models/inventory-model");
 const Util = {};
+const jwt = require('jsonwebtoken')
+require('dotenv').config()
 
 /* ************************
  * Constructs the nav HTML unordered list
@@ -84,24 +86,24 @@ Util.buildDetailsView = async function (data) {
   if (data) {
     display = `
     <div class="details-wrap">    
-      <img class='details-picture' src="${data[0].inv_image}" alt="${
-      data[0].inv_model
+      <img class='details-picture' src="${data.inv_image}" alt="${
+      data.inv_model
     }'s picture">
       <div class="details">
-      <h2 class='details-subtitle'>${data[0].inv_make} ${
-      data[0].inv_model
+      <h2 class='details-subtitle'>${data.inv_make} ${
+      data.inv_model
     } Details</h2>
         <div class="details-info">
           <p class='car-price'><span class='highlight'>Price: </span>$${new Intl.NumberFormat(
             "en-US"
-          ).format(data[0].inv_price)}</p>
+          ).format(data.inv_price)}</p>
           <p><span class='highlight'>Description: </span>${
-            data[0].inv_description
+            data.inv_description
           }</p>
-          <p><span class='highlight'>Color: </span>${data[0].inv_color}</p>
+          <p><span class='highlight'>Color: </span>${data.inv_color}</p>
           <p><span class='highlight'>Miles: </span>${new Intl.NumberFormat(
             "en-US"
-          ).format(data[0].inv_miles)}</p>
+          ).format(data.inv_miles)}</p>
         </div>
       </div>
     </div>
@@ -118,7 +120,7 @@ Util.buildDetailsView = async function (data) {
 Util.buildClassificationList = async function (classification_id = null) {
   let data = await invModel.getClassifications();
   let classificationList = `
-<select name="classification_id" required>
+<select id='classificationList' name="classification_id" required>
   <option value="" disabled ${classification_id?? 'selected'}>Choose a Classification</option>
   ${data.rows.map((row) => {
    return `<option value="${row.classification_id}"
@@ -132,6 +134,42 @@ Util.buildClassificationList = async function (classification_id = null) {
 
   return classificationList
 };
+
+
+/* ****************************************
+* Middleware to check token validity
+**************************************** */
+Util.checkJWTToken = (req, res, next) => {
+  if (req.cookies.jwt) {
+    jwt.verify(
+      req.cookies.jwt,
+      process.env.ACCESS_TOKEN_SECRET,
+      function (err, accountData){
+        if (err) {
+          req.flash("Please log in")
+          res.clearCookie("jwt")
+          return res.redirect("/account/login")
+        }
+        res.locals.accountData = accountData
+        res.locals.loggedin = 1
+        next()
+      })
+  } else {
+    next()
+  }
+}
+
+/* ****************************************
+ *  Check Login
+ * ************************************ */
+Util.checkLogin = (req, res, next) => {
+  if (res.locals.loggedin) {
+    next()
+  } else {
+    req.flash('notice', 'Please log in')
+    return res.redirect('/account/login')
+  }
+}
 
 /* ****************************************
  * Middleware For Handling Errors

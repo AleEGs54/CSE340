@@ -6,6 +6,11 @@ const utilities = require("../utilities");
 const regValidate = require("../utilities/account-validation");
 
 // Route to build inventory by classification view
+router.get(
+  "/",
+  utilities.checkLogin,
+  utilities.handleErrors(accountController.buildAccountManagement)
+);
 router.get("/login", utilities.handleErrors(accountController.buildLogin));
 router.get(
   "/register",
@@ -25,7 +30,7 @@ router.post(
   "/login",
   regValidate.loginRules(),
   regValidate.checkLoginData,
-  utilities.handleErrors(accountController.loginAccount)
+  utilities.handleErrors(accountController.accountLogin)
 );
 
 module.exports = router;

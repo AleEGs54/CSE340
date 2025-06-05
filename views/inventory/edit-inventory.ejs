@@ -12,7 +12,7 @@
 
   
 
-<form class="new-vehicle-form" action="/inv/add-inventory" method="post">
+<form id="updateForm" class="new-vehicle-form" action="/inv/edit-inventory" method="post">
   <em>ALL FIELDS ARE REQUIRED</em>
   <div class="newCar-wrapper">
     <label>
@@ -55,6 +55,14 @@
         Color
         <input required type="text" name="inv_color" value="<%= locals.inv_color %>">
     </label>
-    <button type="submit" class="addClass-button">Add Vehicle</button>
+    <!-- This is the inventory_id needed for update -->
+    <input type="hidden" name="inv_id" 
+    <% if (locals.inv_id) { %> 
+     value='<%= locals.inv_id %>'
+    <% } %>
+    >
+    <button type="submit" class="addClass-button" disabled>Edit Vehicle</button>
   </div>
 </form>
+
+<script src="../../js/inv-update.js"></script>

@@ -34,7 +34,7 @@ async function getDetailsById(invId) {
       WHERE i.inv_id = $1`,
       [invId]
     );
-    return data.rows;
+    return data.rows[0];
   } catch (error) {
     console.error(`getdetailsbyiderror: ${error}`);
   }
@@ -58,6 +58,10 @@ async function addClassification(classification_name) {
     return error.message;
   }
 }
+
+/* ***************************
+ *  Add Vehicle process
+ * ************************** */
 
 async function addVehicleToInventory(
   classification_id,
@@ -88,19 +92,90 @@ async function addVehicleToInventory(
     RETURNING *
     `;
 
-    return await pool.query(sql, 
-      [inv_make,
-    inv_model,
-    inv_year,
-    inv_description,
-    inv_image,
-    inv_thumbnail,
-    inv_price,
-    inv_miles,
-    inv_color,
-    classification_id]);
+    return await pool.query(sql, [
+      inv_make,
+      inv_model,
+      inv_year,
+      inv_description,
+      inv_image,
+      inv_thumbnail,
+      inv_price,
+      inv_miles,
+      inv_color,
+      classification_id,
+    ]);
   } catch (error) {
     return error.message;
+  }
+}
+
+/* ***************************
+ *  Edit Vehicle process
+ * ************************** */
+
+async function updateInventory(
+  classification_id,
+  inv_make,
+  inv_model,
+  inv_description,
+  inv_image,
+  inv_thumbnail,
+  inv_price,
+  inv_year,
+  inv_miles,
+  inv_color,
+  inv_id
+) {
+  try {
+    const sql = `
+    UPDATE inventory 
+    SET inv_make = $1,
+    inv_model = $2,
+    inv_year = $3,
+    inv_description = $4,
+    inv_image = $5,
+    inv_thumbnail = $6,
+    inv_price = $7,
+    inv_miles = $8,
+    inv_color = $9,
+    classification_id = $10
+    WHERE inv_id = $11
+    RETURNING *
+    `;
+
+    const data =  await pool.query(sql, [
+      inv_make,
+      inv_model,
+      inv_year,
+      inv_description,
+      inv_image,
+      inv_thumbnail,
+      inv_price,
+      inv_miles,
+      inv_color,
+      classification_id,
+      inv_id
+    ]);
+
+    return data.rows[0]
+  } catch (error) {
+    console.error('Model error: ' + error)
+  }
+}
+
+/* ***************************
+ *  Delete Vehicle process
+ * ************************** */
+
+async function deleteInventory(inv_id) {
+  try {
+    const sql = `DELETE FROM inventory WHERE inv_id = $1`;
+
+    const data =  await pool.query(sql, [inv_id]);
+
+    return data
+  } catch (error) {
+    console.error('Delete Inventory Error: ' + error)
   }
 }
 
@@ -110,5 +185,7 @@ module.exports = {
   getDetailsById,
   checkExistingClassificationName,
   addClassification,
-  addVehicleToInventory
+  addVehicleToInventory,
+  updateInventory,
+  deleteInventory
 };

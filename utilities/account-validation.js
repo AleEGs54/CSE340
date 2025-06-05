@@ -52,6 +52,7 @@ const validate = {}
         .trim()
         .escape()
         .isEmail().withMessage('A valid email is required')
+        .normalizeEmail()
     ]
  }
 

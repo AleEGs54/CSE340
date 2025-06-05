@@ -513,6 +513,40 @@ form.new-vehicle-form{
   width: 90%;
 }
 
+/* Manage Inventory */
+
+.manageInv-wrap{
+  padding: .5rem;
+}
+
+#inventoryDisplay{
+
+  width: 100%;
+  max-width: 30rem;
+}
+
+#inventoryDisplay a, #inventoryDisplay a:visited{
+  text-decoration:none;
+
+}
+
+#inventoryDisplay thead{
+border-bottom: 1px solid black;
+background-color: #1b6e7671;
+}
+
+#inventoryDisplay tbody tr{
+  margin: 1rem 0;
+}
+
+#inventoryDisplay tbody tr:nth-child(even){
+  background-color: #1b6e7671;
+}
+
+#inventoryDisplay tbody td:nth-child(2){
+  margin-right: .5rem;
+}
+
 /* View for larger Screens */
 @media (min-width: 1024px) {
   body{

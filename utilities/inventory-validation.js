@@ -30,7 +30,11 @@ validate.newClassificationRules = () => {
   ];
 };
 
-validate.newVehicleRules = () => {
+/*  **********************************
+ *  New Inventory Data Validation Rules
+ * ********************************* */
+
+validate.newInventoryRules = () => {
   return [
     body("classification_id")
       .trim()
@@ -125,7 +129,11 @@ validate.checkClassificationName = async (req, res, next) => {
   next();
 };
 
-validate.checkVehicleRules = async (req, res, next) => {
+/*  **********************************
+ *  New Inventory Data Validation Check
+ * ********************************* */
+
+validate.checkInventoryData = async (req, res, next) => {
   const {
     classification_id,
     inv_make,
@@ -159,6 +167,54 @@ validate.checkVehicleRules = async (req, res, next) => {
       inv_year,
       inv_miles,
       inv_color,
+    });
+
+    return;
+  }
+
+  next();
+};
+
+/*  **********************************
+ *  Update Inventory Data Validation Check
+ * ********************************* */
+
+validate.checkUpdateData = async (req, res, next) => {
+  const {
+    classification_id,
+    inv_make,
+    inv_model,
+    inv_description,
+    inv_image,
+    inv_thumbnail,
+    inv_price,
+    inv_year,
+    inv_miles,
+    inv_color,
+    inv_id,
+  } = req.body;
+
+  let select = await utilities.buildClassificationList(classification_id);
+
+  let errors = [];
+  errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    let nav = await utilities.getNav();
+    res.render("inventory/edit-inventory", {
+      errors,
+      title: `Edit: ${inv_make} ${inv_model}`,
+      nav,
+      select,
+      inv_make,
+      inv_model,
+      inv_description,
+      inv_image,
+      inv_thumbnail,
+      inv_price,
+      inv_year,
+      inv_miles,
+      inv_color,
+      inv_id
     });
 
     return;
