@@ -152,6 +152,7 @@ Util.checkJWTToken = (req, res, next) => {
         }
         res.locals.accountData = accountData
         res.locals.loggedin = 1
+        console.log(res.locals)
         next()
       })
   } else {

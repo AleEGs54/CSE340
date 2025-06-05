@@ -46,6 +46,10 @@ html, body{
 
 #tools{
   align-self: start;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 
 /* BODY */
