@@ -9,13 +9,19 @@ const validation = require("../utilities/inventory-validation");
 /* ***************************
  *  GET
  * ************************** */
-router.get("/", utilities.handleErrors(invController.buildInvManagement));
+router.get(
+  "/",
+  utilities.checkPrivileges,
+  utilities.handleErrors(invController.buildInvManagement)
+);
 router.get(
   "/add-classification",
+  utilities.checkPrivileges,
   utilities.handleErrors(invController.buildClassificationForm)
 );
 router.get(
   "/add-inventory",
+  utilities.checkPrivileges,
   utilities.handleErrors(invController.buildInvForm)
 );
 router.get(
@@ -32,22 +38,24 @@ router.get(
 );
 router.get(
   "/edit/:inventory_id",
+  utilities.checkPrivileges,
   utilities.handleErrors(invController.buildEditForm)
 );
 
 router.get(
-    '/delete/:inventory_id',
-    utilities.handleErrors(invController.buildDeleteForm)
-)
+  "/delete/:inventory_id",
+  utilities.checkPrivileges,
+  utilities.handleErrors(invController.buildDeleteForm)
+);
 
 router.get("/errors/error", utilities.handleErrors(invController.throwError));
-
 
 /* ***************************
  *  POST
  * ************************** */
 router.post(
   "/add-classification",
+  utilities.checkPrivileges,
   validation.newClassificationRules(),
   validation.checkClassificationName,
   utilities.handleErrors(invController.addClassification)
@@ -55,6 +63,7 @@ router.post(
 
 router.post(
   "/add-inventory",
+  utilities.checkPrivileges,
   validation.newInventoryRules(),
   validation.checkInventoryData,
   utilities.handleErrors(invController.addVehicleToInventory)
@@ -62,14 +71,16 @@ router.post(
 
 router.post(
   "/edit-inventory/",
+  utilities.checkPrivileges,
   validation.newInventoryRules(),
   validation.checkUpdateData,
   utilities.handleErrors(invController.updateInventory)
 );
 
 router.post(
-    '/delete-inventory/',
-    utilities.handleErrors(invController.deleteInventory)
-)
+  "/delete-inventory/",
+  utilities.checkPrivileges,
+  utilities.handleErrors(invController.deleteInventory)
+);
 
 module.exports = router;

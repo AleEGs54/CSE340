@@ -14,7 +14,6 @@ classificationList.addEventListener('change', () => {
         throw Error("Network response was not OK")
     })
     .then(data => {
-        console.log(data)
         buildInventoryList(data)
     })
     .catch(error => {
@@ -34,7 +33,6 @@ function buildInventoryList(data) {
     </thead>
 <tbody>
     ${data.map(element => {
-        console.log(`${element.inv_id}, ${element.inv_model}`)
         return `
             <tr'>
                 <td>${element.inv_make} ${element.inv_model}</td>

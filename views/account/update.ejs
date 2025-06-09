@@ -1,0 +1,63 @@
+<% if (title) { %>
+<h1 class="classification-title"><%= title %></h1>
+<% } else { res.redirect('/') } %> 
+
+<% if (errors) {%>
+<ul class="notice">
+  <% errors.array().forEach(error => { %>
+  <li><%= error.msg %></li>
+  <% }) %>
+</ul>
+<% } %>
+
+<%= messages() %>
+
+<div class="updateAccount-wrap">
+    <form class="register-form" action="account-information" method="post">
+      <h2>Update General Information</h2>
+    <label>
+      First Name
+      <input required type="text" name="account_firstname" value="<%= locals.account_firstname %>"/>
+    </label>
+    <label>
+      Last Name
+      <input required type="text" name="account_lastname" value="<%= locals.account_lastname %>"/>
+    </label>
+    <label>
+      Email
+      <input required type="text" name="account_email" value="<%= locals.account_email %>"/>
+    </label>
+    <input type="hidden" name="account_id" value="<%= locals.account_id %>">
+    <button type="submit" class="register-button">Update</button>
+  </form>
+  <br>
+  <form class="register-form" action="password" method="post">
+    <h2>Update Password</h2>
+    <p>
+      Passwords must be at least 12 characters and contain at least 1 number, 1
+      capital letter and 1 special character.
+    </p>
+    <p>*Note your original password will be changed.</p>
+
+    <label>
+      New Password
+      <input
+        required
+        type="password"
+        name="account_password"
+        id="account_password"
+        title="Password"
+        pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$"
+      />
+      <small>
+        At least 12 characters, 1 uppercase character, 1 number and 1 special
+        character.
+      </small>
+    </label>
+    <button type="button" class="show-pswd">Show Password</button>
+    <input type="hidden" name="account_id" value="<%= locals.account_id %>">
+    <button type="submit" class="register-button">Change Password</button>
+  </form>
+</div>
+
+<script src="../../js/password.js"></script>

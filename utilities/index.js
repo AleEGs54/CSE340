@@ -1,7 +1,7 @@
 const invModel = require("../models/inventory-model");
 const Util = {};
-const jwt = require('jsonwebtoken')
-require('dotenv').config()
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 /* ************************
  * Constructs the nav HTML unordered list
@@ -121,55 +121,96 @@ Util.buildClassificationList = async function (classification_id = null) {
   let data = await invModel.getClassifications();
   let classificationList = `
 <select id='classificationList' name="classification_id" required>
-  <option value="" disabled ${classification_id?? 'selected'}>Choose a Classification</option>
-  ${data.rows.map((row) => {
-   return `<option value="${row.classification_id}"
-      ${classification_id != null &&
-        row.classification_id == classification_id?
-        "selected" : ""
-      }>${row.classification_name}</option>`
-  }).join('')
-}
-</select>`
+  <option value="" disabled ${
+    classification_id ?? "selected"
+  }>Choose a Classification</option>
+  ${data.rows
+    .map((row) => {
+      return `<option value="${row.classification_id}"
+      ${
+        classification_id != null && row.classification_id == classification_id
+          ? "selected"
+          : ""
+      }>${row.classification_name}</option>`;
+    })
+    .join("")}
+</select>`;
 
-  return classificationList
+  return classificationList;
 };
 
-
 /* ****************************************
-* Middleware to check token validity
-**************************************** */
+ * Middleware to check token validity
+ **************************************** */
 Util.checkJWTToken = (req, res, next) => {
   if (req.cookies.jwt) {
     jwt.verify(
       req.cookies.jwt,
       process.env.ACCESS_TOKEN_SECRET,
-      function (err, accountData){
+      function (err, accountData) {
         if (err) {
-          req.flash("Please log in")
-          res.clearCookie("jwt")
-          return res.redirect("/account/login")
+          req.flash("Please log in");
+          res.clearCookie("jwt");
+          return res.redirect("/account/login");
         }
-        res.locals.accountData = accountData
-        res.locals.loggedin = 1
-        console.log(res.locals)
-        next()
-      })
+        res.locals.accountData = accountData;
+        res.locals.loggedin = 1;
+        console.log(res.locals.accountData)
+        next();
+      }
+    );
   } else {
-    next()
+    next();
   }
-}
+};
 
 /* ****************************************
  *  Check Login
  * ************************************ */
 Util.checkLogin = (req, res, next) => {
   if (res.locals.loggedin) {
-    next()
+    next();
   } else {
-    req.flash('notice', 'Please log in')
-    return res.redirect('/account/login')
+    req.flash("notice", "Please log in");
+    return res.redirect("/account/login");
   }
+};
+
+/* ****************************************
+ *  Check if user is Employee or Admin and allows the middleware flow to continue.
+ * ************************************ */
+Util.checkPrivileges = (req, res, next) => {
+
+  if (req.cookies.jwt) {
+    const accountData = jwt.decode(req.cookies.jwt);
+    if (
+      accountData.account_type === "Admin" ||
+      accountData.account_type === "Employee"
+    ) {
+      return next();
+    }
+
+    req.flash("notice", "You don't have enough privileges. Please log in with an account that does to use this functions.");
+    return res.redirect("/account/login");
+  }
+
+  req.flash(
+    "notice",
+    "You don't have enough privileges. Please log in with an account that does to use this functions."
+  );
+  return res.redirect("/account/login");
+
+};
+
+/* ****************************************
+ * Logout Process
+ **************************************** */
+Util.processLogout = (req, res, next) => {
+  if (req.cookies.jwt){
+    res.clearCookie('jwt')
+    res.locals.loggedin = 0;
+  }
+  next()
 }
 
 /* ****************************************
