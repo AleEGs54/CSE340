@@ -41,17 +41,35 @@ async function registerAccount(
   account_firstname,
   account_lastname,
   account_email,
-  account_password
+  account_password,
+  account_type = null
 ) {
   try {
-    const sql =
-      "INSERT INTO account (account_firstname, account_lastname, account_email, account_password, account_type) VALUES ($1, $2, $3, $4, 'Client') RETURNING *";
-    return await pool.query(sql, [
+    let sql
+    let result 
+    //If account_type exists, add it to the query, if not, be 'Client'.
+    if (account_type){
+      sql = "INSERT INTO account (account_firstname, account_lastname, account_email, account_password, account_type) VALUES ($1, $2, $3, $4, $5) RETURNING *"
+      result = await pool.query(sql, [
+      account_firstname,
+      account_lastname,
+      account_email,
+      account_password,
+      account_type
+    ]);
+    } else {
+      sql = "INSERT INTO account (account_firstname, account_lastname, account_email, account_password, account_type) VALUES ($1, $2, $3, $4, 'Client') RETURNING *";
+      result = await pool.query(sql, [
       account_firstname,
       account_lastname,
       account_email,
       account_password,
     ]);
+    }
+
+
+
+    return result
   } catch (error) {
     return error.message;
   }
@@ -109,10 +127,29 @@ async function updateAccount(
   account_id,
   account_firstname,
   account_lastname,
-  account_email
+  account_email,
+  account_type = null
 ) {
   try {
-    const result = await pool.query(
+
+    let result
+
+  if (account_type){
+     result = await pool.query(
+      `
+      UPDATE account 
+      SET account_firstname = $1,
+           account_lastname = $2,
+           account_email = $3,
+           account_type = $4
+      WHERE account_id = $5 
+      RETURNING *`,
+      [account_firstname, account_lastname, account_email, account_type, account_id]
+    );
+  
+  } else {
+
+     result = await pool.query(
       `
       UPDATE account 
       SET account_firstname = $1,
@@ -122,12 +159,14 @@ async function updateAccount(
       RETURNING *`,
       [account_firstname, account_lastname, account_email, account_id]
     );
-    console.log(result.rows[0])
-    return result;
+  }
+
+  return result;
+
   } catch (error) {
     return new Error("An error ocurred during the update. Try again later.");
   }
-}
+  }
 
 /* *****************************
  * Update Password
@@ -144,10 +183,38 @@ async function updatePassword(
       RETURNING *`,
       [hashedPassword, account_id]
     );
-    console.log(result.rows[0])
     return result;
   } catch (error) {
     return new Error("An error ocurred during the update. Try again later.");
+  }
+}
+
+/* ***************************
+ *  Delete Account process
+ * ************************** */
+
+async function deleteAccount(account_id) {
+  try {
+    const sql = `DELETE FROM account WHERE account_id = $1`;
+
+    const data =  await pool.query(sql, [account_id]);
+
+    return data
+  } catch (error) {
+    console.error('Delete Account Error: ' + error)
+  }
+}
+
+async function getAccountsByType(account_type) {
+  try {
+      const sql = `
+      SELECT * FROM account
+      WHERE account_type = $1`
+      const data = await pool.query(sql, [account_type])
+
+      return data.rows
+  } catch (error) {
+    
   }
 }
 
@@ -159,5 +226,7 @@ module.exports = {
   getAccountById,
   checkExistingEmailExclusive,
   updateAccount,
-  updatePassword
+  updatePassword,
+  getAccountsByType,
+  deleteAccount
 };

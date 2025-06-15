@@ -1,0 +1,74 @@
+<% if (title) { %>
+<h1 class="classification-title"><%= title %></h1>
+<% } else { res.redirect('/') } %> <% if (errors) {%>
+<ul class="notice">
+  <% errors.array().forEach(error => { %>
+  <li><%= error.msg %></li>
+  <% }) %>
+</ul>
+<% } %>
+
+
+<form
+  class="register-form"
+  action="/account/administration/delete"
+  method="post"
+>
+  <span
+    ><em
+      >AFTER THE ACCOUNT IS DELETED THERE IS NO UNDO. THE ACCOUNT CAN'T BE
+      RECOVERED AFTER DELETION. PLEASE MAKE SURE THIS IS THE RIGHT ACCOUNT.</em
+    ></span
+  >
+
+  <label>
+    First Name
+    <input
+      readonly
+      required
+      type="text"
+      name="account_firstname"
+      id="account_firstname"
+      title="First Name"
+      value="<%= locals.account_firstname %>"
+    />
+  </label>
+  <label>
+    Last Name
+    <input
+      readonly
+      required
+      type="text"
+      name="account_lastname"
+      id="account_lastname"
+      title="Last Name"
+      value="<%= locals.account_lastname %>"
+    />
+  </label>
+  <label>
+    Email address
+    <input
+      readonly
+      required
+      type="email"
+      name="account_email"
+      id="account_email"
+      title="Email Address"
+      value="<%= locals.account_email %>"
+    />
+  </label>
+  <label>
+    Account Type
+    <input
+      readonly
+      required
+      type="text"
+      name="account_type"
+      id="account_type"
+      title="Account Type"
+      value="<%= locals.account_type %>"
+    />
+  </label>
+  <input type="hidden" name="account_id" value="<%= locals.account_id %>" />
+  <button type="submit" class="register-button">Delete Account</button>
+</form>

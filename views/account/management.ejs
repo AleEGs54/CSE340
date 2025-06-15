@@ -1,0 +1,22 @@
+<% if (title) { %>
+    <h1 class="classification-title"><%= title %></h1>
+<% } else {
+    res.redirect('/')
+} %>
+
+<%- messages() %>
+
+<div class="management-links">
+    <a href="administration/add-account">Add New Account</a>
+</div>
+
+<div class="manageInv-wrap">
+    <h2>Manage Accounts</h2>
+    <p>Select an type from the list to display accounts.</p>
+    <%- select %>
+    <table id="inventoryDisplay"></table>
+    
+    <noscript>JavaScript must be enabled to use this page.</noscript>
+</div>
+
+<script src="../../js/accounts.js"></script>

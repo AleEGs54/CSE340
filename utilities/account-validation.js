@@ -53,6 +53,7 @@ validate.registrationRules = () => {
   ];
 };
 
+
 validate.loginRules = () => {
   return [
     body("account_email")
@@ -124,7 +125,7 @@ validate.updatePasswordRules = () => {
         console.log(password, account_password)
         if (await bcrypt.compare(password, account_password)) {
           throw new Error(
-            "You can't use your current password as the new password."
+            "You can't use the current password as the new password."
           );
         }
       }),
@@ -146,6 +147,27 @@ validate.checkRegData = async (req, res, next) => {
       errors,
       title: "Registration",
       nav,
+      account_firstname,
+      account_lastname,
+      account_email,
+    });
+    return;
+  }
+  next();
+};
+
+validate.checkManualRegData = async (req, res, next) => {
+  const { account_firstname, account_lastname, account_email, account_type } = req.body;
+  let select = await utilities.buildTypeList(account_type)
+  let errors = [];
+  errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    let nav = await utilities.getNav();
+    res.render("account/add-account", {
+      errors,
+      title: "Add New Accont",
+      nav,
+      select,
       account_firstname,
       account_lastname,
       account_email,
@@ -193,7 +215,6 @@ validate.checkUpdateData = async (req, res, next) => {
 
 validate.checkUpdatePassword = async (req, res, next) => {
   const { account_firstname, account_lastname, account_email, account_id } = res.locals.accountData;
-  console.log(res.locals.accountData)
   let errors = [];
   errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -206,6 +227,54 @@ validate.checkUpdatePassword = async (req, res, next) => {
       account_lastname,
       account_email,
       account_id
+    });
+    return;
+  }
+  next();
+};
+
+validate.checkEditData = async (req, res, next) => {
+  const { account_firstname, account_lastname, account_email, account_type, account_id } = req.body;
+  let errors = [];
+  errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    let nav = await utilities.getNav();
+    let select = await utilities.buildTypeList(account_type)
+    res.render("account/edit", {
+      errors,
+      title: "Edit Existing Account",
+      nav,
+      select,
+      account_firstname,
+      account_lastname,
+      account_email,
+      account_type,
+      account_id
+    });
+    return;
+  }
+  next();
+};
+
+validate.checkEditPassword = async (req, res, next) => {
+  const accountId = parseInt(req.body.account_id)
+  const account_data = await accountModel.getAccountById(accountId)
+  const {account_firstname, account_lastname, account_email, account_type } = account_data;
+  let errors = [];
+  errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    let nav = await utilities.getNav();
+    let select = await utilities.buildTypeList(account_type)
+    res.render("account/edit", {
+      errors,
+      title: "Edit Existing Account",
+      nav,
+      select,
+      account_firstname,
+      account_lastname,
+      account_email,
+      account_type,
+      account_id: accountId
     });
     return;
   }

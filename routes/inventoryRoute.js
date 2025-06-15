@@ -11,17 +11,17 @@ const validation = require("../utilities/inventory-validation");
  * ************************** */
 router.get(
   "/",
-  utilities.checkPrivileges,
+  utilities.checkPrivileges(['Admin', 'Employee']),
   utilities.handleErrors(invController.buildInvManagement)
 );
 router.get(
   "/add-classification",
-  utilities.checkPrivileges,
+  utilities.checkPrivileges(['Admin', 'Employee']),
   utilities.handleErrors(invController.buildClassificationForm)
 );
 router.get(
   "/add-inventory",
-  utilities.checkPrivileges,
+  utilities.checkPrivileges(['Admin', 'Employee']),
   utilities.handleErrors(invController.buildInvForm)
 );
 router.get(
@@ -38,13 +38,13 @@ router.get(
 );
 router.get(
   "/edit/:inventory_id",
-  utilities.checkPrivileges,
+  utilities.checkPrivileges(['Admin', 'Employee']),
   utilities.handleErrors(invController.buildEditForm)
 );
 
 router.get(
   "/delete/:inventory_id",
-  utilities.checkPrivileges,
+  utilities.checkPrivileges(['Admin', 'Employee']),
   utilities.handleErrors(invController.buildDeleteForm)
 );
 
@@ -55,7 +55,7 @@ router.get("/errors/error", utilities.handleErrors(invController.throwError));
  * ************************** */
 router.post(
   "/add-classification",
-  utilities.checkPrivileges,
+  utilities.checkPrivileges(['Admin', 'Employee']),
   validation.newClassificationRules(),
   validation.checkClassificationName,
   utilities.handleErrors(invController.addClassification)
@@ -63,7 +63,7 @@ router.post(
 
 router.post(
   "/add-inventory",
-  utilities.checkPrivileges,
+  utilities.checkPrivileges(['Admin', 'Employee']),
   validation.newInventoryRules(),
   validation.checkInventoryData,
   utilities.handleErrors(invController.addVehicleToInventory)
@@ -71,7 +71,7 @@ router.post(
 
 router.post(
   "/edit-inventory/",
-  utilities.checkPrivileges,
+  utilities.checkPrivileges(['Admin', 'Employee']),
   validation.newInventoryRules(),
   validation.checkUpdateData,
   utilities.handleErrors(invController.updateInventory)
@@ -79,7 +79,7 @@ router.post(
 
 router.post(
   "/delete-inventory/",
-  utilities.checkPrivileges,
+  utilities.checkPrivileges(['Admin', 'Employee']),
   utilities.handleErrors(invController.deleteInventory)
 );
 

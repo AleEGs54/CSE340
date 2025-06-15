@@ -1,0 +1,80 @@
+<% if (title) { %>
+<h1 class="classification-title"><%= title %></h1>
+<% } else { res.redirect('/') } %>
+
+<% if (errors) {%>
+  <ul class="notice">
+    <% errors.array().forEach(error => { %>
+      <li><%= error.msg %></li>
+      <% }) %>
+  </ul>
+  <% } %>
+
+<form class="register-form" action="/account/administration/edit/account-information" method="post">
+  <span><em>All fields are required</em></span>
+
+  <label>
+    User Privileges
+    <%- select %>
+  </label>
+
+  <label>
+    First Name
+    <input
+      required
+      type="text"
+      name="account_firstname"
+      id="account_firstname"
+      title="First Name"
+      value="<%= locals.account_firstname %>"
+    />
+  </label>
+  <label>
+    Last Name
+    <input
+      required
+      type="text"
+      name="account_lastname"
+      id="account_lastname"
+      title="Last Name"
+      value="<%= locals.account_lastname %>"
+    />
+  </label>
+  <label>
+    Email address
+    <input
+      required
+      type="email"
+      name="account_email"
+      id="account_email"
+      title="Email Address"
+      value="<%= locals.account_email %>"
+    />
+  </label>
+  <input type="hidden" name="account_id" value="<%= locals.account_id %>">
+  <button type="submit" class="register-button">Apply Changes</button>
+</form>
+
+<form class="register-form" action="/account/administration/edit/password" method="post">
+  <label>
+    Password
+    <input
+      required
+      type="password"
+      name="account_password"
+      id="account_password"
+      title="Password"
+      pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$"
+    />
+    <small>
+      At least 12 characters, 1 uppercase character, 1 number and 1 special character.
+    </small>
+  </label>
+    <button type="button" class="show-pswd">
+        Show Password
+    </button>
+      <input type="hidden" name="account_id" value="<%= locals.account_id %>">
+  <button type="submit" class="register-button">Update Password</button>
+</form>
+
+<script src="../../../js/password.js"></script> 

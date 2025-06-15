@@ -1,4 +1,5 @@
 const invModel = require("../models/inventory-model");
+const accountModel = require("../models/account-model")
 const Util = {};
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
@@ -139,6 +140,29 @@ Util.buildClassificationList = async function (classification_id = null) {
   return classificationList;
 };
 
+//Build the select, part of the form
+Util.buildTypeList = async function (account_type = null) {
+  let types = ['Client', 'Employee', 'Admin']
+  let typeList = `
+<select id='typeList' name="account_type" required>
+  <option value="" disabled ${
+    account_type ?? "selected"
+  }>Choose an account type</option>
+  ${types
+    .map((type) => {
+      return `<option value=${type}
+      ${
+        account_type != null && type == account_type
+          ? "selected"
+          : ""
+      }>${type}</option>`;
+    })
+    .join("")}
+</select>`;
+
+  return typeList;
+};
+
 /* ****************************************
  * Middleware to check token validity
  **************************************** */
@@ -177,28 +201,50 @@ Util.checkLogin = (req, res, next) => {
 };
 
 /* ****************************************
+ *  Check User Credentials
+ * ************************************ */
+Util.checkUserCredentials = (req, res, next) => {
+  //This function assumes the user is logged in (checkLogin fn)
+
+  const accountData = jwt.decode(req.cookies.jwt);
+  const jwt_accountId = accountData.account_id;
+  const url_accountId = parseInt(req.params.account_id);
+
+  if (jwt_accountId !== url_accountId){
+    req.flash('notice','Forbidden Page')
+    return res.redirect('/account')
+  }
+
+  next()
+}
+
+/* ****************************************
  *  Check if user is Employee or Admin and allows the middleware flow to continue.
  * ************************************ */
-Util.checkPrivileges = (req, res, next) => {
+Util.checkPrivileges = (allowedRoles) => {
 
-  if (req.cookies.jwt) {
-    const accountData = jwt.decode(req.cookies.jwt);
-    if (
-      accountData.account_type === "Admin" ||
-      accountData.account_type === "Employee"
-    ) {
+  return function (req, res, next) {
+
+    const token = req.cookies.jwt;
+
+    if (!token) {
+      req.flash("notice", "Please, Log in.");
+      return res.redirect("/account/login");
+    }
+
+    const account_data = jwt.decode(token)
+    if (allowedRoles.includes(account_data.account_type)){
       return next();
     }
 
-    req.flash("notice", "You don't have enough privileges. Please log in with an account that does to use this functions.");
-    return res.redirect("/account/login");
+    req.flash(
+      "notice",
+      "You don't have enough privileges. Please log in with an account that does to use this functions."
+    );
+    return res.redirect("/account");
+
   }
 
-  req.flash(
-    "notice",
-    "You don't have enough privileges. Please log in with an account that does to use this functions."
-  );
-  return res.redirect("/account/login");
 
 };
 
