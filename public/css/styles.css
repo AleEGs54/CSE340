@@ -556,6 +556,12 @@ background-color: #1b6e7671;
   margin-right: .5rem;
 }
 
+/* Manage Account */
+
+.management-wrap{
+  padding: .5rem;
+}
+
 /* View for larger Screens */
 @media (min-width: 1024px) {
   body{

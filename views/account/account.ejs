@@ -4,20 +4,22 @@
 <h1 class="classification-title"><%= title %></h1>
 <% } else { res.redirect('/') } %>
 
-<%- messages() %>
-<h2>Welcome, <%= locals.accountData.account_firstname %>!</h2>
-<p>You're logged in!</p>
-<h3>Update Your Account</h3>
-<p><a href="/account/update/<%= locals.accountData.account_id %>">Edit account</a></p>
-
-<% if (locals.accountData.account_type === 'Admin' || locals.accountData.account_type === 'Employee') { %>
- <h3>Inventory Management</h3>
- <p><a href="/inv">Manage Inventory</a></p>
-<% } %>
-
-<% if (locals.accountData.account_type === 'Admin') { %>
- <h3>User Administration</h3>
- <p><a href="/account/administration">Manage Users and Privileges</a></p>
-<% } %>
-
+<div class="management-wrap">
+    <%- messages() %>
+    <h2>Welcome, <%= locals.accountData.account_firstname %>!</h2>
+    <p>You're logged in!</p>
+    <h3>Update Your Account</h3>
+    <p><a href="/account/update/<%= locals.accountData.account_id %>">Edit account</a></p>
+    
+    <% if (locals.accountData.account_type === 'Admin' || locals.accountData.account_type === 'Employee') { %>
+     <h3>Inventory Management</h3>
+     <p><a href="/inv">Manage Inventory</a></p>
+    <% } %>
+    
+    <% if (locals.accountData.account_type === 'Admin') { %>
+     <h3>User Administration</h3>
+     <p><a href="/account/administration">Manage Users and Privileges</a></p>
+    <% } %>
+    
+</div>
 
