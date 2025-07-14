@@ -32,6 +32,7 @@ app.set("layout", "./layouts/layout") //not at views root
  * Middleware
  *************************/
 
+//for session
 app.use(session({
   store: new (require('connect-pg-simple')(session))({
     createTableIfMissing: true,
